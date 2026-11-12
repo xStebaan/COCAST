@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>COCAST | Seguimiento de Cultivos de Coca</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+            <h1 class="h4 mb-0">COCAST | Consulta de Cultivos de Coca por Municipio</h1>
+        </div>
+        <div class="card-body">
+            <form method="get" action="/" class="row g-2 mb-4">
+                <div class="col-md-8">
+                    <input type="text" name="municipality" class="form-control"
+                           placeholder="Escribe un municipio (ej. Tumaco, Tibú, El Tambo)..."
+                           th:value="${municipality}">
+                </div>
+                <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-success">Buscar</button>
+                </div>
+                <div class="col-md-2 d-grid">
+                    <a href="/" class="btn btn-outline-secondary">Limpiar</a>
+                </div>
+            </form>
+
+            <!-- Mensaje cuando no hay coincidencias (Criterio de aceptación) -->
+            <div th:if="${#lists.isEmpty(places)}" class="alert alert-warning">
+                No se encontraron registros para el municipio ingresado.
+            </div>
+
+            <!-- Tabla de resultados -->
+            <div th:if="${!#lists.isEmpty(places)}" class="table-responsive">
+                <p class="text-muted small">
+                    Mostrando <strong th:text="${#lists.size(places)}">0</strong> registros encontrados.
+                </p>
+                <table class="table table-striped table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Departamento</th>
+                            <th>Municipio</th>
+                            <th class="text-end">Hectáreas 2023</th>
+                            <th class="text-end">Hectáreas 2024</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${places}">
+                            <td th:text="${item.departamento}"></td>
+                            <td class="fw-bold" th:text="${item.municipio}"></td>
+                            <td class="text-end" th:text="${item.hectareas2023}"></td>
+                            <td class="text-end text-success fw-bold" th:text="${item.hectareas2024}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-muted small">
+            Fuente: Portal Nacional de Datos Abiertos de Colombia (datos.gov.co)
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
